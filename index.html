@@ -33,7 +33,7 @@
 	<!-- Potree Viewer Container -->
 	<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px;">
 		<div id="potree_render_area"></div>
-		<div id="potree_sidebar_container"> </div>
+		<div id="potree_sidebar_container"></div>
 	</div>
 
 	<script>
@@ -58,26 +58,36 @@
 			viewer.toggleSidebar();
 		});
 
-		// Load and add point cloud to scene
+		// Mid-point calculations for setting the camera position
+		let midX = (375140.494525 + 376247.775225) / 2;
+		let midY = (8055823.295200 + 8056930.575900) / 2;
+		let midZ = (21.855416 + 1106.543216) / 2;
+
+		// Load and add point cloud to the scene
 		Potree.loadPointCloud("resources/cloud_merged/ept.json", "My Point Cloud", function(e){
 			let scene = viewer.scene;
 			let pointcloud = e.pointcloud;
 			
 			console.log("Point cloud loaded:", pointcloud);
 			
+			// Adjust material settings
 			let material = pointcloud.material;
 			material.size = 1.0;  // Ensure points are visible
 			material.pointSizeType = Potree.PointSizeType.FIXED;  // Use fixed size for debugging
-			material.shape = Potree.PointShape.SQUARE;  // Square points for visibility
-			
+			material.shape = Potree.PointShape.CIRCLE;  // Circular points for visibility
+			material.activeAttributeName = "rgb";  // Use RGB if available, otherwise fall back
+
 			console.log("Point cloud material:", material);
 
+			// Add point cloud to the scene
 			scene.addPointCloud(pointcloud);
 			console.log("Point cloud added to scene:", scene.pointclouds.length);
 
-			// Adjust camera
-			scene.view.position.set(midX, midY, midZ);
-			scene.view.lookAt(new THREE.Vector3(midX, midY, midZ));
+			// Adjust camera to mid-point of the bounding box
+			scene.view.position.set(midX, midY, midZ + 50);  // Slightly above the midpoint for a better view
+			scene.view.lookAt(new THREE.Vector3(midX, midY, midZ));  // Look at the center of the bounding box
+
+			// Fit the view to the point cloud
 			viewer.fitToScreen();
 		});
 
