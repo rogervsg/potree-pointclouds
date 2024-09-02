@@ -62,26 +62,25 @@
 		Potree.loadPointCloud("resources/cloud_merged/ept.json", "My Point Cloud", function(e){
 			let scene = viewer.scene;
 			let pointcloud = e.pointcloud;
-
-			// Set point cloud material properties
+			
+			console.log("Point cloud loaded:", pointcloud);
+			
 			let material = pointcloud.material;
-			material.size = 0.6;
-			material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-			material.shape = Potree.PointShape.SQUARE;
-			material.activeAttributeName = "elevation";
-			material.elevationRange = [-3, 50];  // Adjust based on your data
+			material.size = 1.0;  // Ensure points are visible
+			material.pointSizeType = Potree.PointSizeType.FIXED;  // Use fixed size for debugging
+			material.shape = Potree.PointShape.SQUARE;  // Square points for visibility
+			
+			console.log("Point cloud material:", material);
 
-			// Add the point cloud to the scene
 			scene.addPointCloud(pointcloud);
+			console.log("Point cloud added to scene:", scene.pointclouds.length);
 
-			// Set the initial camera position and view direction based on the bounds
-			let midX = (375140.494525 + 376247.775225) / 2;
-			let midY = (8055823.295200 + 8056930.575900) / 2;
-			let midZ = (21.855416 + 1106.543216) / 2;
-
-			scene.view.position.set(midX, midY, midZ + 50);  // Camera position slightly above the mid-point
-			scene.view.lookAt(new THREE.Vector3(midX, midY, midZ));  // Camera looks at the mid-point of the bounding box
+			// Adjust camera
+			scene.view.position.set(midX, midY, midZ);
+			scene.view.lookAt(new THREE.Vector3(midX, midY, midZ));
+			viewer.fitToScreen();
 		});
+
 	</script>
 
 </body>
