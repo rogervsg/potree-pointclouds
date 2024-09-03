@@ -64,7 +64,7 @@
         let midZ = (21.855416 + 1106.543216) / 2;
 
         // Load and add point cloud to the scene
-        Potree.loadPointCloud("https://drive.google.com/uc?export=download&id=1NmsYzMMLbVhTEt0EpvX1frUGWIdBV36-", "My Point Cloud", function(e){
+        Potree.loadPointCloud("https://gitlab.com/potree/potree-repository/-/raw/main/cloud_merged/metadata.json", "My Point Cloud", function(e){
             let scene = viewer.scene;
             let pointcloud = e.pointcloud;
 
